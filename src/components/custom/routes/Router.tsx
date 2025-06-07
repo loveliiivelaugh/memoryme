@@ -25,12 +25,11 @@ import MemorySphereScene from "../MemorySphere5";
 import SettingsPage from "@components/pages/SettingsPage";
 import { encrypt } from "@helpers/encrypt";
 
-const useProfileData = () => {
-    const profileQuery = useQuery(queries.query("/api/v1/guardian/profile-context"))
-    console.log("profileQuery: ", profileQuery)
-    return {}
-}
-
+// const useProfileData = () => {
+//     const profileQuery = useQuery(queries.query("/api/v1/guardian/profile-context"))
+//     console.log("profileQuery: ", profileQuery)
+//     return {}
+// }
 
 type Memory = {
     id: string;
@@ -121,7 +120,7 @@ const HomePage = () => {
         setRelatedMemories([]);
         } else {
         const results = fuse.search(query);
-        setRelatedMemories(results.map(r => r.item));
+        setRelatedMemories(results.map((r: any) => r.item));
         }
     }, [query, fuse]);
 

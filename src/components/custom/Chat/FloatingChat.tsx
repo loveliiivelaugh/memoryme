@@ -1,6 +1,6 @@
 import { Box, Fab  } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
-import ReusablePopover from "@components/Custom/ReusablePopover/ReusablePopover";
+import ReusablePopover from "@custom/ReusablePopover/ReusablePopover";
 import Chat from "./Chat";
 import ChatView from "./ChatView";
 import { useChatStore } from "@store/index";

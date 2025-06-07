@@ -3,6 +3,7 @@ import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { Folder } from '@mui/icons-material';
 import { FaReact } from "react-icons/fa";
+import type { ReactNode } from 'react';
 import { MenuItemType } from './TreeView.type';
 
 

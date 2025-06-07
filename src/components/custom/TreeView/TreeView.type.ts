@@ -1,9 +1,10 @@
+import type { ReactNode } from 'react';
 
 type MenuItemType = {
     id: string;
     label: string;
     menu?: MenuItemType[];
-    icon?: JSX.Element;
+    icon?: ReactNode;
     onClick?: () => void;
 };
 

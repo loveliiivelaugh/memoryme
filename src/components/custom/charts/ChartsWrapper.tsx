@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Modal, Grid2 as Grid, IconButton } from "@mui/material";
+import { Box, Modal, Grid, IconButton } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { styled }from "@mui/material/styles";
 

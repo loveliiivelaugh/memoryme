@@ -67,7 +67,7 @@ const chatScripts = {
 
                 // Send the current message and conversation id
                 // the backend will query the running messages
-                const url = args?.submitPath ? args.submitPath(paths) : paths.postChat;
+                const url = args?.submitPath ? args.submitPath(paths) : (paths as any).postChat;
                 const response = await client.post(url, {
                     chatMode: chatStore.mode,
                     id: chatStore.activeChat.id,
@@ -136,7 +136,7 @@ const chatScripts = {
             // Only need to send the current message and conversation id
             // Will query the running messages from the backend
             await serverMutation.mutate({
-                url: paths.postChat,
+                url: (paths as any).postChat,
                 payload: {
                     id: chatStore.activeChat.id,
                     message: ({

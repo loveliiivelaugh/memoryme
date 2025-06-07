@@ -15,7 +15,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 
 // Components
 // import LoadingSpinner from './LoadingSpinner';
-import MarkdownWrapper from '@components/Custom/wrappers/MarkdownWrapper/MarkdownWrapper';
+import MarkdownWrapper from '@components/custom/wrappers/MarkdownWrapper/MarkdownWrapper';
 
 // Services
 import { ChatState, useChatStore } from "@store/index";

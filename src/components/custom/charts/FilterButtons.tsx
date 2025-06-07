@@ -1,4 +1,4 @@
-import { Grid2 as Grid, IconButton, Typography } from "@mui/material";
+import { Grid, IconButton, Typography } from "@mui/material";
 
 const FilterButtons = (props: any) => {
 

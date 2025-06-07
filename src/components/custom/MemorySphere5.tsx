@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Html } from '@react-three/drei'
+// @ts-expect-error
 import * as THREE from 'three'
 import useUtilityStore from '@store/utilityStore'
 import { Chip, Modal, Box, Button } from '@mui/material'
