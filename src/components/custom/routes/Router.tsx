@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 import Fuse from 'fuse.js';
 import { client, queries } from "@api/index";
 import { useChatStore } from "@store/index";
-import { supabaseLocal } from "@api/supabase";
+import { supabase } from "@api/supabase";
 import { MessageCard } from "../MessageCard/MessageCard";
 import BasicSimpleTreeView from "../TreeView/TreeView";
 import Vision from "../Vision/Vision";
@@ -89,16 +89,11 @@ const HomePage = () => {
             const res = await client.post("/api/v1/memory/query", {
                 query: input
             })
-        // const res = await fetch('/api/v1/memory/query', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ query: input }),
-        // });
 
-        const data = await res.data;
-        setRelatedMemories(data?.memories || []);
+            const data = await res.data;
+            setRelatedMemories(data?.memories || []);
         } catch (error) {
-        console.error('Error fetching related memories:', error);
+            console.error('Error fetching related memories:', error);
         }
     };
 
@@ -128,7 +123,7 @@ const HomePage = () => {
 
     useEffect(() => {
         const fetchInitialMessages = async () => {
-            const { data } = await supabaseLocal
+            const { data } = await supabase
                 .from('messages')
                 .select('*')
                 .order('created_at', { ascending: false })
@@ -138,7 +133,7 @@ const HomePage = () => {
 
         fetchInitialMessages();
 
-        const channel = supabaseLocal
+        const channel = supabase
             .channel('messages')
             .on(
                 'postgres_changes',
@@ -152,7 +147,7 @@ const HomePage = () => {
             .subscribe();
 
         return () => {
-            supabaseLocal.removeChannel(channel);
+            supabase.removeChannel(channel);
         };
     }, []);
 
