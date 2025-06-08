@@ -276,6 +276,11 @@ const routes = [
         element: <LoginPage />
     },
     {
+        label: "Login",
+        path: "/login",
+        element: <LoginPage />
+    },
+    {
         label: "Dashboard",
         path: "/dashboard",
         element: <IntegrationsPage />
@@ -294,7 +299,7 @@ const routes = [
         label: "Auth Callback",
         path: "/auth/callback/:service",
         element: <IntegrationsPage />
-    },
+    }
 ];
 
 // Layout.tsx
