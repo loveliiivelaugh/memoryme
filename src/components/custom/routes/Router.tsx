@@ -309,9 +309,9 @@ export default function Layout() {
             {() => (
                     <main>
                         <BasicNavbar />
-                        <AuthGate>
+                        {/* <AuthGate>
                             <>Logged In 🧙🏼‍♂️✨🎉</>
-                        </AuthGate>
+                        </AuthGate> */}
                         <Container maxWidth={false} sx={{ mt: 10 }}>
                             <Outlet />
                         </Container>
