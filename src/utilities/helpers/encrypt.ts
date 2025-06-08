@@ -1,11 +1,19 @@
+
+import { Buffer } from "buffer";
+
 export async function encrypt(text: string, key: string) {
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const encoder = new TextEncoder();
   const encoded = encoder.encode(text);
 
+  // FIX: Properly decode the key from hex
+  const keyBytes = Buffer.from(key, "hex");
+
+  console.log("ENCRYPTION KEY: ", text, key);
+
   const cryptoKey = await crypto.subtle.importKey(
     "raw",
-    encoder.encode(key),
+    keyBytes,
     "AES-GCM",
     false,
     ["encrypt"]
@@ -28,10 +36,12 @@ export async function encrypt(text: string, key: string) {
   };
 }
 export async function decrypt(ciphertext: string, iv: string, tag: string, key: string) {
+  const keyBytes = Buffer.from(key, "hex");
+
   const encoder = new TextEncoder();
   const cryptoKey = await crypto.subtle.importKey(
     "raw",
-    encoder.encode(key),
+    keyBytes,
     "AES-GCM",
     false,
     ["decrypt"]

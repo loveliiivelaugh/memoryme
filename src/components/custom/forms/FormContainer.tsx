@@ -65,7 +65,7 @@ const buildFields: any = (fieldsArray: any[], formState: any) => fieldsArray
         // console.log("buildFields: ", field, formState);
         // Define properties specific to the field type
         const FieldsProps = {
-            TextField: { ...commonProperties },
+            TextField: { ...commonProperties, ...field?.fieldType && {type: field.fieldType} },
             Select: {
                 ...commonProperties,
                 options: (field?.enumValues || []),

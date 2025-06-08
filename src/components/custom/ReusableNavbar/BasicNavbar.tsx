@@ -1,9 +1,11 @@
 import { AppBar, Toolbar, ListItemText, Typography, Button, ListItem, ListItemIcon } from "@mui/material";
 import { useNavigate } from "react-router";
 import logo from "@assets/logo.png"
+import { useSupabaseStore } from "@store/supabaseStore";
 
 export default function BasicNavbar() {
     const navigate = useNavigate();
+    const supabaseStore = useSupabaseStore();
     return (
         <AppBar sx={{ backgroundColor: "transparent", color: "#333", backdropFilter: "blur(10px)", boxShadow: "none" }}>
             <Toolbar>
@@ -17,11 +19,18 @@ export default function BasicNavbar() {
                         </Typography>
                     } secondary="AI-Powered Personalized Memory Management" />
                 </ListItem>
+                {supabaseStore?.session?.user?.email}
                 <Button color="inherit" onClick={() => navigate('/dashboard')}>Home</Button>
                 {/* <Button color="inherit" onClick={() => navigate('/builder')}>Builder</Button>
                 <Button color="inherit">Contact</Button> */}
                 <Button color="inherit">Pricing</Button>
-                <Button color="inherit">Login</Button>
+                {supabaseStore.session ? (
+                    <>
+                        <Button color="inherit" onClick={() => navigate('/dashboard')}>Dashboard</Button>
+                    </>
+                ) : (
+                    <Button color="inherit" onClick={() => navigate('/')}>Login</Button>
+                )}
             </Toolbar>
         </AppBar>
     )

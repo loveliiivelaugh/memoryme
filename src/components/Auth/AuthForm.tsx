@@ -1,5 +1,7 @@
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { useForm } from '@tanstack/react-form';
+import { useNavigate } from 'react-router';
+
 
 const fieldDefinitions = [
     {
@@ -89,6 +91,11 @@ const AuthForm = (props: any) => {
                     <Grid size={12}>
                         <Typography variant="body2">For Demo Purposes</Typography>
                         <Typography variant="body2">Sign In as ...</Typography>
+                        {/* <Box sx={{ display: "flex", justifyContent: "start", gap: 2, pt: 2 }}>
+                            <Button variant="contained" onClick={() => navigate('/dashboard')}>Admin</Button>
+                            <Button variant="contained" onClick={() => navigate('/dashboard')}>Staff</Button>
+                            <Button variant="contained" onClick={() => navigate('/dashboard')}>Guest</Button>
+                        </Box> */}
                     </Grid>
                 </Grid>
             </Box>

@@ -4,7 +4,7 @@ import { ThemeSupa } from '@supabase/auth-ui-shared'
 import { supabase } from '@api/supabase'
 import { AppRouter } from '@custom/routes/Router'
 import { useSupabaseStore } from '@store/supabaseStore'
-import { Button, Grid } from '@mui/material'
+import { Button, Grid2 as Grid } from '@mui/material'
 
 export default function App() {
     const { session, setSession }: any = useSupabaseStore();

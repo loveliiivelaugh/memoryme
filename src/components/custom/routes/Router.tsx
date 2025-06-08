@@ -14,17 +14,16 @@ import { motion } from "framer-motion";
 import Fuse from 'fuse.js';
 import { client, queries } from "@api/index";
 import { useChatStore } from "@store/index";
-import { supabase } from "@api/supabase";
 import { MessageCard } from "../MessageCard/MessageCard";
 import BasicSimpleTreeView from "../TreeView/TreeView";
-import Vision from "../Vision/Vision";
 import MemoryCard from "../MemoryList";
 import MemoryOverviewPage from "@components/pages/MemoryOverviewPage";
 import { FilterToggleGroup } from "../FilterToggleGroup";
 import MemorySphereScene from "../MemorySphere5";
 import SettingsPage from "@components/pages/SettingsPage";
-import { encrypt } from "@helpers/encrypt";
 import IntegrationsPage from "@components/pages/IntegrationsPage";
+import LoginPage from "@components/Auth/AuthPage";
+import { AuthGate } from "@components/Auth/AuthGate.gen";
 
 // const useProfileData = () => {
 //     const profileQuery = useQuery(queries.query("/api/v1/guardian/profile-context"))
@@ -154,13 +153,8 @@ const HomePage = () => {
 
     return (
         <>
-            <Button onClick={async () => {
-                const result = await client.get("/api/v1/guardian/profile-context")
-                console.log("result: ", result)
-            }}>Test Blog Automation</Button>
-
             <Grid size={12} sx={{ height: "50vh", zIndex: -100 }}>
-                {/* <MemorySphereScene /> */}
+                <MemorySphereScene />
             </Grid>
 
             <Grid container spacing={2}>
@@ -279,14 +273,17 @@ const routes = [
     {
         label: "Home",
         path: "/",
-        element: <IntegrationsPage />
-        // element: <>HOME</>
-        // element: <HomePage />
+        element: <LoginPage />
     },
     {
-        label: "Vision",
-        path: "/vision",
-        element: <Vision />
+        label: "Dashboard",
+        path: "/dashboard",
+        element: <IntegrationsPage />
+    },
+    {
+        label: "Explorer",
+        path: "/explorer",
+        element: <HomePage />
     },
     {
         label: "Memory",
@@ -305,12 +302,14 @@ export default function Layout() {
     return (
         <Providers>
             {() => (
-                <main>
-                    <BasicNavbar />
-                    <Container maxWidth={false} sx={{ mt: 10 }}>
-                        <Outlet />
-                    </Container>
-                </main>
+                <AuthGate>
+                    <main>
+                        <BasicNavbar />
+                        <Container maxWidth={false} sx={{ mt: 10 }}>
+                            <Outlet />
+                        </Container>
+                    </main>
+                </AuthGate>
             )}
         </Providers>
     );

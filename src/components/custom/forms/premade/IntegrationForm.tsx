@@ -1,7 +1,7 @@
 import FormContainer from "@components/custom/forms/FormContainer";
 import useUtilityStore from "@store/utilityStore";
 
-export function IntegrationForm({ columns, userId }: { columns?: any, userId?: string }) {
+export function IntegrationForm({ columns, userId, onSubmit }: { columns?: any, userId?: string, onSubmit?: (values: any) => void }) {
     const utilityStore = useUtilityStore();
 
     return (
@@ -39,6 +39,7 @@ export function IntegrationForm({ columns, userId }: { columns?: any, userId?: s
             }}
             handleCancelClick={() => utilityStore.setModal({ open: false, content: null })}
             handleSubmit={(value) => {
+                if (onSubmit) onSubmit(value);
 
                 // encryptMutation.mutate(values) {
                 //     const { encrypted_token, iv, auth_tag } = encryptToken(values.token);
