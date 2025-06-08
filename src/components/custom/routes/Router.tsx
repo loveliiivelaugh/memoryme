@@ -307,14 +307,15 @@ export default function Layout() {
     return (
         <Providers>
             {() => (
-                <AuthGate>
                     <main>
                         <BasicNavbar />
+                        <AuthGate>
+                            <>Logged In 🧙🏼‍♂️✨🎉</>
+                        </AuthGate>
                         <Container maxWidth={false} sx={{ mt: 10 }}>
                             <Outlet />
                         </Container>
                     </main>
-                </AuthGate>
             )}
         </Providers>
     );
