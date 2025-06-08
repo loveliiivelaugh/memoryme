@@ -1,14 +1,14 @@
 import FormContainer from "@components/custom/forms/FormContainer";
 import useUtilityStore from "@store/utilityStore";
 
-export function IntegrationForm({ userId }: { userId: string }) {
+export function IntegrationForm({ columns, userId }: { columns?: any, userId?: string }) {
     const utilityStore = useUtilityStore();
 
     return (
         <FormContainer
             schema={{
                 table: "user_integrations",
-                columns: [
+                columns: columns || [
                     {
                         name: "service",
                         // @ts-ignore
@@ -22,6 +22,18 @@ export function IntegrationForm({ userId }: { userId: string }) {
                         label: "API Token",
                         dataType: "text",
                         description: "Enter your integration token (will be encrypted)"
+                    },
+                    {
+                        name: "database_id",
+                        // @ts-ignore
+                        label: "Database ID",
+                        dataType: "text"
+                    },
+                    {
+                        name: "page_id",
+                        // @ts-ignore
+                        label: "Page ID",
+                        dataType: "text"
                     },
                 ]
             }}

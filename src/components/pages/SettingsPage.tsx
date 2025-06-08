@@ -285,7 +285,7 @@ export default function SettingsPage() {
         }
         utilityStore.setModal({
             open: true,
-            content: <IntegrationForm userId={session?.user?.id || mockUser.id} />
+            content: <IntegrationForm userId={(session?.user?.id || mockUser.id) as string} />
         })
     }
 
@@ -298,7 +298,7 @@ export default function SettingsPage() {
             <Tabs
                 tabs={[
                     { label: "Profile" },
-                    { label: "Achievements" },
+                    // { label: "Achievements" },
                     { label: "Billing" },
                     { label: "Integrations" },
                     { label: "Security" },
@@ -312,11 +312,11 @@ export default function SettingsPage() {
                     0: session?.user || mockUser
                         ? <ProfileContent profile={session?.user || mockUser} setProfile={setProfile} />
                         : <>Not logged in</>,
-                    1: <AchievementsPanel achievements={achievements?.data} error={error} />,
-                    2: <BillingContent profile={session?.user || mockUser} handleStripePortal={handleStripePortal} />,
-                    3: <IntegrationsContent isEnabled={isEnabled} setIsEnabled={setIsEnabled} handleIntegrationForm={handleIntegrationForm} />,
-                    4: <SecurityContent />,
-                    5: <ApiContent />
+                    // 1: <AchievementsPanel achievements={achievements?.data} error={error} />,
+                    1: <BillingContent profile={session?.user || mockUser} handleStripePortal={handleStripePortal} />,
+                    2: <IntegrationsContent isEnabled={isEnabled} setIsEnabled={setIsEnabled} handleIntegrationForm={handleIntegrationForm} />,
+                    3: <SecurityContent />,
+                    4: <ApiContent />
                 }[value])}
             />
         </Box>

@@ -24,6 +24,7 @@ import { FilterToggleGroup } from "../FilterToggleGroup";
 import MemorySphereScene from "../MemorySphere5";
 import SettingsPage from "@components/pages/SettingsPage";
 import { encrypt } from "@helpers/encrypt";
+import IntegrationsPage from "@components/pages/IntegrationsPage";
 
 // const useProfileData = () => {
 //     const profileQuery = useQuery(queries.query("/api/v1/guardian/profile-context"))
@@ -61,25 +62,25 @@ const HomePage = () => {
 
     const guardianFiles = guardianFilesQuery.data?.data || [];
 
-    useEffect(() => {
-        (async () => {
-            const code = new URLSearchParams(window.location.search).get("code");
-            console.log("code: ", code)
+    // useEffect(() => {
+    //     (async () => {
+    //         const code = new URLSearchParams(window.location.search).get("code");
+    //         console.log("code: ", code)
     
-            if (code && window.location.search.includes('github')) {
-                const encryptedCode = await encrypt(code, import.meta.env.VITE_MASTER_API_KEY);
-                const metadata = {};
-                const payload = {
-                    user_id: import.meta.env.VITE_ADMIN_ID,
-                    service: 'github',
-                    access_token: encryptedCode.ciphertext,
-                    access_token_iv: encryptedCode.iv,
-                    ...metadata
-                }
-                const result = await client.post('/database/write_db/user_integrations', payload)
-            };
-        })();
-    }, [])
+    //         if (code && window.location.search.includes('github')) {
+    //             const encryptedCode = await encrypt(code, import.meta.env.VITE_MASTER_API_KEY);
+    //             const metadata = {};
+    //             const payload = {
+    //                 user_id: import.meta.env.VITE_ADMIN_ID,
+    //                 service: 'github',
+    //                 access_token: encryptedCode.ciphertext,
+    //                 access_token_iv: encryptedCode.iv,
+    //                 ...metadata
+    //             }
+    //             const result = await client.post('/database/write_db/user_integrations', payload)
+    //         };
+    //     })();
+    // }, [])
 
     const [query, setQuery] = useState('');
     const [relatedMemories, setRelatedMemories] = useState<Memory[]>([]);
@@ -112,44 +113,44 @@ const HomePage = () => {
 
     useEffect(() => {
         if (query.trim() === '') {
-        setRelatedMemories([]);
+            setRelatedMemories([]);
         } else {
-        const results = fuse.search(query);
-        setRelatedMemories(results.map((r: any) => r.item));
+            const results = fuse.search(query);
+            setRelatedMemories(results.map((r: any) => r.item));
         }
     }, [query, fuse]);
 
     console.log("chatMutation: ", chatMutation, guardianMessagesQuery, chatMessages, guardianFilesQuery)
 
-    useEffect(() => {
-        const fetchInitialMessages = async () => {
-            const { data } = await supabase
-                .from('messages')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(50);
-            if (data) setChatMessages(data);
-        };
+    // useEffect(() => {
+    //     const fetchInitialMessages = async () => {
+    //         const { data } = await supabase
+    //             .from('messages')
+    //             .select('*')
+    //             .order('created_at', { ascending: false })
+    //             .limit(50);
+    //         if (data) setChatMessages(data);
+    //     };
 
-        fetchInitialMessages();
+    //     fetchInitialMessages();
 
-        const channel = supabase
-            .channel('messages')
-            .on(
-                'postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'messages' },
-                (payload: any) => {
-                    // @ts-ignore
-                    setChatMessages((prev: any) => [...prev, payload.new]);
-                    // setChatMessages((prev: any) => [payload.new, ...prev.slice(0, 49)]);
-                }
-            )
-            .subscribe();
+    //     const channel = supabase
+    //         .channel('messages')
+    //         .on(
+    //             'postgres_changes',
+    //             { event: 'INSERT', schema: 'public', table: 'messages' },
+    //             (payload: any) => {
+    //                 // @ts-ignore
+    //                 setChatMessages((prev: any) => [...prev, payload.new]);
+    //                 // setChatMessages((prev: any) => [payload.new, ...prev.slice(0, 49)]);
+    //             }
+    //         )
+    //         .subscribe();
 
-        return () => {
-            supabase.removeChannel(channel);
-        };
-    }, []);
+    //     return () => {
+    //         supabase.removeChannel(channel);
+    //     };
+    // }, []);
 
     return (
         <>
@@ -159,7 +160,7 @@ const HomePage = () => {
             }}>Test Blog Automation</Button>
 
             <Grid size={12} sx={{ height: "50vh", zIndex: -100 }}>
-                <MemorySphereScene />
+                {/* <MemorySphereScene /> */}
             </Grid>
 
             <Grid container spacing={2}>
@@ -187,45 +188,45 @@ const HomePage = () => {
                     zIndex: 10
                 }}>
                     {memories.map((memory: any) => (
-                    <motion.div
-                        key={memory.id}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.2 }}
-                        onClick={() => handleSelectMemory(memory)}
-                    >
-                        <MemoryCard memory={memory} />
-                    </motion.div>
+                        <motion.div
+                            key={memory.id}
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.2 }}
+                            onClick={() => handleSelectMemory(memory)}
+                        >
+                            <MemoryCard memory={memory} />
+                        </motion.div>
                     ))}
                 </Grid>
 
                 <Grid size={4}>
                     <SettingsPage />
                     <Box sx={{ overflowY: 'auto', maxHeight: 'calc(100vh - 150px)' }}>
-                    <Typography variant="h6" sx={{ mb: 2 }}>
-                        🔗 Related Memories
-                    </Typography>
-
-                    {query && relatedMemories.length === 0 ? (
-                        <Typography variant="body2" color="text.secondary">
-                        No results found for <strong>{query}</strong>.
+                        <Typography variant="h6" sx={{ mb: 2 }}>
+                            🔗 Related Memories
                         </Typography>
-                    ) : (
-                        relatedMemories.map((memory) => (
-                        <Paper
-                            key={memory.id}
-                            variant="outlined"
-                            sx={{ p: 2, mb: 2, backgroundColor: 'background.default' }}
-                        >
-                            <Typography variant="subtitle2" gutterBottom>
-                            {memory.title || 'Untitled'}
-                            </Typography>
+
+                        {query && relatedMemories.length === 0 ? (
                             <Typography variant="body2" color="text.secondary">
-                            {memory.payload.summary || memory.payload.content.slice(0, 100) + '...'}
+                                No results found for <strong>{query}</strong>.
                             </Typography>
-                        </Paper>
-                        ))
-                    )}
+                        ) : (
+                            relatedMemories.map((memory) => (
+                                <Paper
+                                    key={memory.id}
+                                    variant="outlined"
+                                    sx={{ p: 2, mb: 2, backgroundColor: 'background.default' }}
+                                >
+                                    <Typography variant="subtitle2" gutterBottom>
+                                        {memory.title || 'Untitled'}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        {memory.payload.summary || memory.payload.content.slice(0, 100) + '...'}
+                                    </Typography>
+                                </Paper>
+                            ))
+                        )}
                     </Box>
                 </Grid>
             </Grid>
@@ -278,7 +279,9 @@ const routes = [
     {
         label: "Home",
         path: "/",
-        element: <HomePage />
+        element: <IntegrationsPage />
+        // element: <>HOME</>
+        // element: <HomePage />
     },
     {
         label: "Vision",
@@ -292,8 +295,8 @@ const routes = [
     },
     {
         label: "Auth Callback",
-        path: "/auth/callback/:service?code=",
-        element: <HomePage />
+        path: "/auth/callback/:service",
+        element: <IntegrationsPage />
     },
 ];
 
@@ -307,7 +310,6 @@ export default function Layout() {
                     <Container maxWidth={false} sx={{ mt: 10 }}>
                         <Outlet />
                     </Container>
-                    {/* <Footer /> */}
                 </main>
             )}
         </Providers>
@@ -326,9 +328,4 @@ export function AppRouter() {
     ];
     const appRouter = createBrowserRouter(appRoutes);
     return <RouterProvider router={appRouter} />;
-    // return (
-    //     <PageTransitionWrapper>
-    //         <RouterProvider router={appRouter} />
-    //     </PageTransitionWrapper>
-    // )
 };

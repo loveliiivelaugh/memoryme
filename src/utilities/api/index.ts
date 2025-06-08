@@ -52,13 +52,19 @@ const queries = ({
         queryKey: [queryPath],
         queryFn: async () => payload 
             ? (await (client as any)[method || "post"](queryPathCallback(queryPath), payload)).data
-            : (await (client as any)[method || "get"](queryPathCallback(queryPath))).data
+            : (await (client as any)[method || "get"](queryPathCallback(queryPath))).data,
+        options: {
+            retries: 2
+        }
     }),
     mutate: (queryPath: any) => ({
         mutationKey: [queryPath],
         mutationFn: async (payload?: PayloadTypes["MutatePayload"]) => payload?.options?.debounce
             ? (await debounce(client.post(queryPathCallback(queryPath), payload), payload.options.debounce)).data
-            : (await client.post(queryPathCallback(queryPath), payload)).data
+            : (await client.post(queryPathCallback(queryPath), payload)).data,
+        options: {
+            retries: 2
+        }
     }),
 
     supabaseQuery: (options: SupabaseQueryOptions) => ({
