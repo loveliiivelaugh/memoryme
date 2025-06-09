@@ -353,6 +353,7 @@ const  IntegrationsPage = () => {
     const encryptedMemories = encryptedMemoriesQuery.data?.data || [];
     console.log("encryptedMemories: ", encryptedMemories)
     useEffect(() => {
+        if (!encryptedMemoriesQuery.data) return;
         (async () => {
             const decryptedMemories = await Promise.all(
                 encryptedMemories.map(async (mem: any) => {

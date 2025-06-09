@@ -6,6 +6,7 @@ import { Card, CardContent } from "@mui/material";
 import { motion } from "framer-motion";
 import { formatDistanceToNow } from "date-fns";
 import { Box, Typography } from "@mui/material";
+import { useNavigate } from 'react-router';
 
 export type Memory2 = {
   user_id: string;
@@ -23,6 +24,7 @@ type Props = {
 };
 
 export const MemoryCard2: React.FC<Props> = ({ memory }) => {
+  const navigate = useNavigate();
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -38,7 +40,16 @@ export const MemoryCard2: React.FC<Props> = ({ memory }) => {
           transition: "all 0.2s ease",
           "&:hover": {
             boxShadow: 4,
+            cursor: "pointer"
           },
+        }}
+        onClick={() => {
+          console.log("memory: ", memory)
+          navigate(`/memory/${memory.trace_id}`, {
+            state: {
+              memory
+            }
+          });
         }}
       >
         <CardContent>

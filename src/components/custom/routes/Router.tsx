@@ -296,6 +296,11 @@ const routes = [
         element: <MemoryOverviewPage />
     },
     {
+        label: "Memory/:id",
+        path: "/memory/:id",
+        element: <MemoryOverviewPage />
+    },
+    {
         label: "Integrations",
         path: "/integrations",
         element: (

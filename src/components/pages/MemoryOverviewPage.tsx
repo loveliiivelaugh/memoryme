@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Grid, TextField, Tooltip, Typography, Paper, Drawer, IconButton } from '@mui/material';
+import { Box, Grid, TextField, Tooltip, Typography, Paper, Drawer, IconButton, Breadcrumbs, Divider, ListItemText } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { motion } from 'framer-motion';
@@ -8,6 +8,7 @@ import { supabase } from '@api/supabase';
 import { client } from '@api/index';
 import { Timeline } from '@mui/lab';
 import { TimelineItem, TimelineSeparator, TimelineDot, TimelineConnector, TimelineContent } from '@mui/lab';
+import { useParams, useNavigate, useLocation, Link } from 'react-router';
 
 const MemoryTimeline = ({ memories }: { memories: any[] }) => {
   const getColorForType = (type: string) => {
@@ -45,6 +46,9 @@ const MemoryTimeline = ({ memories }: { memories: any[] }) => {
 export default function MemoryOverviewPage() {
   // const memoriesQuery = useQuery(queries.query("/database/read_db/memories"))
   // const memories = memoriesQuery.data?.data || [];
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log("location: ", location)
   const [memories, setMemories] = useState<any[]>([]);
   const [relatedMemories, setRelatedMemories] = useState<any[]>([]);
   const [query, setQuery] = useState('');
@@ -102,7 +106,47 @@ export default function MemoryOverviewPage() {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} rowSpacing={4}>
+      <Breadcrumbs aria-label="breadcrumb">
+        <Link color="inherit" to="/" onClick={() => navigate('/')}>
+          Home
+        </Link>
+        <Link color="inherit" to="/memories" onClick={() => navigate('/memories')}>
+          Memories
+        </Link>
+        <Typography color="text.primary">Memory</Typography>
+      </Breadcrumbs>
+      <Grid size={12}>
+        <Typography variant="h4" gutterBottom>Memory Viewer</Typography>
+        <Typography variant="body1" color="text.secondary">View and manage your memories here.</Typography>
+      </Grid>
+      <Grid size={12}>
+        <Typography variant="h6" gutterBottom>Metadata</Typography>
+        <Divider />
+        <Grid container spacing={2} my={2}>
+          <Grid size={6}>
+            <ListItemText primary="Source" secondary={location.state?.memory?.source} />
+          </Grid>
+          <Grid size={6}>
+            <ListItemText primary="Tags" secondary={location.state?.memory?.tags?.join(', ')} />
+          </Grid>
+        </Grid>
+        <Divider />
+        <Grid container spacing={2} my={2}>
+          <Grid size={6}>
+            <ListItemText primary="Timestamp" secondary={location.state?.memory?.created_at} />
+          </Grid>
+          <Grid size={6}>
+            <ListItemText primary="Trace ID" secondary={location.state?.memory?.trace_id} />
+          </Grid>
+        </Grid>
+        <Divider />
+        <Typography variant="h6" gutterBottom my={2}>Content</Typography>
+        <Typography variant="body2">{location.state?.memory?.content}</Typography>
+      </Grid>
+
+
+
       <Grid size={12}>
         <TextField
           fullWidth
