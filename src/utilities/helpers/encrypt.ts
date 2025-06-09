@@ -48,14 +48,16 @@ export async function decrypt(ciphertext: string, iv: string, tag: string, key: 
   );
 
   // Recombine ciphertext and tag
-  const ctBytes = Buffer.from(ciphertext, "base64");
-  const tagBytes = Buffer.from(tag, "base64");
+  const ctBytes = Buffer.from(ciphertext, "hex");
+  const tagBytes = Buffer.from(tag, "hex");
   const combined = new Uint8Array(ctBytes.length + tagBytes.length);
   combined.set(ctBytes);
   combined.set(tagBytes, ctBytes.length);
 
+  const ivBytes = Buffer.from(iv, "hex");
+
   const decryptedBuffer = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv: Buffer.from(iv, "base64") },
+    { name: "AES-GCM", iv: ivBytes },
     cryptoKey,
     combined
   );

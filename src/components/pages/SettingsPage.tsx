@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import Tabs from '@components/Mui/Tabs'
-import { Box, Typography, Stack, TextField, Button, Paper, Avatar, Grid } from '@mui/material'
+import { 
+    Box, Typography, Stack, TextField, Button, 
+    Paper, Avatar, Grid, ListItemText, 
+    ListItem, ListItemSecondaryAction, Switch 
+} from '@mui/material'
 import { motion } from 'framer-motion'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { IntegrationForm } from '@components/custom/forms/premade/IntegrationForm'
@@ -159,10 +163,15 @@ export function AchievementsPanel({ achievements, error }: { achievements: Achie
 
 // const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
-const ProfileContent = ({ profile, setProfile }: { profile: any, setProfile: any }) => (
+export const ProfileContent = ({ profile, setProfile }: { profile: any, setProfile: any }) => (
     <Paper sx={{ p: 3, borderRadius: 3 }}>
         <Stack spacing={3}>
-            <Avatar src={profile.avatar_url} />
+            <Box display="flex" p={2} gap={2}>
+                <Avatar src={profile.avatar_url} />
+                <Typography variant="h6" gutterBottom>
+                    Account
+                </Typography>
+            </Box>
             <TextField
                 label="Email"
                 value={profile.email}
@@ -176,11 +185,48 @@ const ProfileContent = ({ profile, setProfile }: { profile: any, setProfile: any
                 fullWidth
             />
             <TextField
-                label="Tier"
-                value={profile.stripe_tier || 'free'}
+                label="Username"
+                value={profile.username || ''}
+                onChange={(e) => setProfile.mutate({ ...profile, username: e.target.value })}
+                fullWidth
+            />
+            <Button variant="contained" color="primary">
+                Update
+            </Button>
+            <Typography variant="h6" gutterBottom>
+                API Keys
+            </Typography>
+            <TextField
+                label="API Key"
+                value={profile.api_key || ''}
                 InputProps={{ readOnly: true }}
                 fullWidth
             />
+            <Button variant="outlined" color="error">
+                Regenerate API Key
+            </Button>
+            <Typography variant="h6" gutterBottom>
+                Encryption
+            </Typography>
+            <TextField
+                label="Encryption Key"
+                value={profile.encryption_key || ''}
+                InputProps={{ readOnly: true }}
+                fullWidth
+            />
+            <Button variant="outlined" color="error">
+                Regenerate Encryption Key
+            </Button>
+            <Box sx={{ display: 'flex' }}>
+                <ListItemText
+                    primary="End-to-end Encryption"
+                    secondary="Enable end-to-end encryption for your memories. This means only you can decrypt and read your memories."
+                />
+                <Switch
+                    checked={profile.end_to_end_encryption}
+                    onChange={(e: any) => setProfile.mutate({ ...profile, end_to_end_encryption: e.target.checked })}
+                />
+            </Box>
             <Button variant="contained" color="primary">
                 Save Changes
             </Button>

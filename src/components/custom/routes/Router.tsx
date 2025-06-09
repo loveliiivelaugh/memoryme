@@ -20,8 +20,8 @@ import MemoryCard from "../MemoryList";
 import MemoryOverviewPage from "@components/pages/MemoryOverviewPage";
 import { FilterToggleGroup } from "../FilterToggleGroup";
 import MemorySphereScene from "../MemorySphere5";
-import SettingsPage from "@components/pages/SettingsPage";
-import IntegrationsPage from "@components/pages/IntegrationsPage";
+import SettingsPage, { ProfileContent } from "@components/pages/SettingsPage";
+import IntegrationsPage, { IntegrationButtons, IntegrationsGrid } from "@components/pages/IntegrationsPage";
 import LoginPage from "@components/Auth/AuthPage";
 import { AuthGate } from "@components/Auth/AuthGate.gen";
 
@@ -294,6 +294,35 @@ const routes = [
         label: "Memory",
         path: "/memory",
         element: <MemoryOverviewPage />
+    },
+    {
+        label: "Integrations",
+        path: "/integrations",
+        element: (
+            <>
+                <Box sx={{ p: 2 }}>
+                    <Typography variant="h4" fontWeight={700} gutterBottom>
+                        Connect your tools
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" mb={2}>
+                        Connect your tools to Memory.me to automatically save your memories from other apps.
+                    </Typography>
+                </Box>
+                <IntegrationsGrid />
+                {/* <IntegrationButtons /> */}
+            </>
+        )
+    },
+    {
+        label: "Settings",
+        path: "/settings",
+        element: <ProfileContent profile={{
+            id: "1",
+            name: "Michael Woodward",
+            email: "michael@woodward-studio.com",
+            avatar_url: "https://i.pravatar.cc/150?u=1",
+            stripe_tier: "free"
+        }} setProfile={() => {}} />
     },
     {
         label: "Auth Callback",

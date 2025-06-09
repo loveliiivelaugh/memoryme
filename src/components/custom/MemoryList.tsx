@@ -1,8 +1,74 @@
 import { useState } from 'react';
-import { Box, Tooltip, Typography, Paper, IconButton } from '@mui/material';
+import { Tooltip, Paper, IconButton } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Chip, Stack} from '@mui/material';
-import { motion } from 'framer-motion';
+import { Card, CardContent } from "@mui/material";
+import { motion } from "framer-motion";
+import { formatDistanceToNow } from "date-fns";
+import { Box, Typography } from "@mui/material";
+
+export type Memory2 = {
+  user_id: string;
+  agent: string;
+  summary: string;
+  content: string;
+  trace_id: string;
+  source: string;
+  created_at: string;
+  score: number;
+};
+
+type Props = {
+  memory: Memory2;
+};
+
+export const MemoryCard2: React.FC<Props> = ({ memory }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.015 }}
+      transition={{ duration: 0.3 }}
+    >
+      <Card
+        variant="outlined"
+        sx={{
+          borderRadius: 3,
+          backgroundColor: "background.paper",
+          transition: "all 0.2s ease",
+          "&:hover": {
+            boxShadow: 4,
+          },
+        }}
+      >
+        <CardContent>
+          <Stack spacing={1}>
+            <Box display="flex" justifyContent="space-between">
+              <Typography variant="overline" color="text.secondary">
+                {memory.source.toUpperCase()}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {formatDistanceToNow(new Date(memory.created_at), { addSuffix: true })}
+              </Typography>
+            </Box>
+
+            <Typography variant="subtitle1" fontWeight="bold">
+              {memory.summary}
+            </Typography>
+
+            <Typography variant="body2" color="text.secondary" noWrap>
+              {memory.content}
+            </Typography>
+
+            <Typography variant="caption" color="text.secondary">
+              Score: {memory.score}
+            </Typography>
+          </Stack>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
 
 type MemoryPayload = {
   tags: string[];
