@@ -14,18 +14,21 @@ const formatSize = (windowSize: { height: number, width: number }) => {
 const Drawer = ({ children, ...props }: DrawerType) => {
     const { drawer, setDrawer } = useUtilityStore();
     const windowSize = useWindowSize();
+    const responsiveAnchor = typeof drawer?.anchor === "object"
+        ? drawer.anchor[formatSize(windowSize) as keyof typeof drawer.anchor]
+        : props.anchor;
+    const responsiveVariant = typeof drawer?.variant === "object"
+        ? drawer.variant[formatSize(windowSize) as keyof typeof drawer.variant]
+        : props.variant;
+
     return (
-        // @ts-ignore
         <SwipeableDrawer
             {...props}
             {...drawer}
-            {...(typeof(props.anchor) === "object") && {
-                anchor: props.anchor[formatSize(windowSize) as keyof typeof props.anchor]
-            }}
-            {...(typeof(props?.variant) === "object") && {
-                variant: props.variant[formatSize(windowSize) as keyof typeof props.variant]
-            }}
+            {...(responsiveAnchor ? { anchor: responsiveAnchor as any } : {})}
+            {...(responsiveVariant ? { variant: responsiveVariant as any } : {})}
             onClose={() => setDrawer({ open: false })}
+            onOpen={() => {}}
         >
             <Box sx={{ minWidth: 200, height: '100%', mt: 0, ...(drawer as any)?.boxStyle }}>
                 {drawer?.content && drawer.content}

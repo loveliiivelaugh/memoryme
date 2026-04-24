@@ -55,13 +55,18 @@ const ChartButtons = (props: any) => {
 
     return (
         <Box sx={{ display:"flex", justifyContent: "space-between", gap: 1 }}>
-            <IconButton color="inherit" onClick={() => setShowButtons(!showButtons)}>
+            <IconButton
+                color="inherit"
+                aria-label={showButtons ? "Hide chart controls" : "Show chart controls"}
+                onClick={() => setShowButtons(!showButtons)}
+            >
                 {showButtons ? <ArrowRight /> : <ArrowLeft />}
             </IconButton>
             {showButtons && buttons.map((button) => (
                 <IconButton
                     key={`${button.value}-chart-button`}
                     color="inherit"
+                    aria-label={button.label}
                     onClick={() => props.setActiveChart(button.value)}
                 >
                     {button.icon || button.label}

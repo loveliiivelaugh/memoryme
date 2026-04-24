@@ -13,7 +13,7 @@ export default defineConfig({
       '@scripts': path.resolve(__dirname, './src/utilities/scripts'),
       '@helpers': path.resolve(__dirname, './src/utilities/helpers'),
       '@components': path.resolve(__dirname, './src/components'),
-      '@custom': path.resolve(__dirname, './src/components/Custom'),
+      '@custom': path.resolve(__dirname, './src/components/custom'),
       '@mui2': path.resolve(__dirname, './src/components/Mui'),
       '@lib': path.resolve(__dirname, './src/utilities/lib'),
       '@theme': path.resolve(__dirname, './src/utilities/theme'),

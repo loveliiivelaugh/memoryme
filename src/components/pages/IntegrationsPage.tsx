@@ -10,6 +10,7 @@ import { useUtilityStore } from "@store/utilityStore"
 import { IntegrationForm } from "@components/custom/forms/premade/IntegrationForm"
 import { useFilePicker } from "@components/custom/forms/useFilePicker"
 import { MemoryCard2 } from "@components/custom/MemoryList"
+import { appConfig, getGithubAuthRedirectUrl } from "@utilities/config/appConfig"
 import NotionIcon from "@mui/icons-material/NoteAdd"
 import GitHubIcon from "@mui/icons-material/GitHub"
 import EmailIcon from "@mui/icons-material/Email"
@@ -87,7 +88,7 @@ export function IntegrationsGrid() {
         open: true,
         content: (
             <IntegrationForm
-            userId={import.meta.env.VITE_ADMIN_USER_ID as string}
+            userId={appConfig.adminUserId}
             columns={config.fields}
             onSubmit={(values) => {
                 console.log("Integration form values:", values);
@@ -100,7 +101,7 @@ export function IntegrationsGrid() {
 
   const handleGithubConnect = () => {
     window.open(
-      `https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&redirect_uri=http://localhost:5173/auth/callback/github`,
+      `https://github.com/login/oauth/authorize?client_id=${appConfig.githubClientId}&redirect_uri=${encodeURIComponent(getGithubAuthRedirectUrl())}`,
       "_blank"
     );
   };
@@ -194,16 +195,16 @@ export const IntegrationButtons = () => {
 
         const sensitive = {
             ...values.value,
-            "user_id": import.meta.env.VITE_ADMIN_USER_ID
+            "user_id": appConfig.adminUserId
         };
 
         const { ciphertext, iv, tag } = await encrypt(
             JSON.stringify(sensitive),
-            import.meta.env.VITE_MEMORY_ENCRYPTION_KEY
+            appConfig.memoryEncryptionKey
         );
       
         const encryptedPayload = {
-            user_id: import.meta.env.VITE_ADMIN_USER_ID,
+            user_id: appConfig.adminUserId,
             service: values.value.service,
             encrypted_token: ciphertext,
             iv,
@@ -281,7 +282,7 @@ export const IntegrationButtons = () => {
         utilityStore.setModal({
             open: true,
             content: <IntegrationForm 
-                userId={import.meta.env.VITE_ADMIN_USER_ID as string} 
+                userId={appConfig.adminUserId} 
                 columns={columns}
                 onSubmit={(values) => {
                     console.log(values);
@@ -297,14 +298,14 @@ export const IntegrationButtons = () => {
                 color="primary"
                 fullWidth
                 onClick={() => {
-                    window.open("https://github.com/login/oauth/authorize?client_id=" + import.meta.env.VITE_GITHUB_CLIENT_ID + "&redirect_uri=" + "http://localhost:5173/auth/callback/github", "_blank");
+                    window.open("https://github.com/login/oauth/authorize?client_id=" + appConfig.githubClientId + "&redirect_uri=" + encodeURIComponent(getGithubAuthRedirectUrl()), "_blank");
                 }}
             >
                 GitHub
             </Button>
             <Typography variant="body2" color="text.secondary">Create Memories from GitHub Commits</Typography>
             <Button variant="outlined" onClick={() => createMemoryMutation.mutate({
-                "user_id": import.meta.env.VITE_ADMIN_USER_ID,
+                "user_id": appConfig.adminUserId,
                 "service": "github",
                 "details": {
                     "repo": "",
@@ -346,7 +347,7 @@ const  IntegrationsPage = () => {
     const params = useParams();
     const location = useLocation();
     const navigate = useNavigate();
-    const encryptedMemoriesQuery = useQuery(queries.query("/database/read_db/encrypted_memories?user_id=" + import.meta.env.VITE_ADMIN_USER_ID))
+    const encryptedMemoriesQuery = useQuery(queries.query("/database/read_db/encrypted_memories?user_id=" + appConfig.adminUserId))
     const utilityStore = useUtilityStore();
     
     const [decryptedMemories, setDecryptedMemories] = useState<any[]>([]);
@@ -362,7 +363,7 @@ const  IntegrationsPage = () => {
                       mem.encrypted_data,
                       mem.iv,
                       mem.tag,
-                      import.meta.env.VITE_MEMORY_ENCRYPTION_KEY // base64 string
+                      appConfig.memoryEncryptionKey // base64 string
                     );
               
                     return {
@@ -386,7 +387,7 @@ const  IntegrationsPage = () => {
             if (!code) return;
             await client.post("/api/v1/auth/callback", {
                 "service": "github",
-                "user_id": import.meta.env.VITE_ADMIN_USER_ID,
+                "user_id": appConfig.adminUserId,
                 "code": code
             });
         })();
