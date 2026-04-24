@@ -1,11 +1,14 @@
 import axios from "axios";
 import apiConfig from "./api.config.json";
 import { supabase } from "./supabase";
+import { appConfig } from "@utilities/config/appConfig";
 
-// creds
-const isDev = (import.meta.env.MODE === "development");
-apiConfig.host.baseURL = isDev ? "http://localhost:5250" : import.meta.env.VITE_HOSTNAME;
-apiConfig.host.headers.Authorization = "Bearer " + import.meta.env.VITE_MASTER_API_KEY;
+apiConfig.host.baseURL = appConfig.apiBaseUrl;
+if (appConfig.masterApiKey) {
+    apiConfig.host.headers.Authorization = "Bearer " + appConfig.masterApiKey;
+} else {
+    apiConfig.host.headers.Authorization = "";
+}
 
 const client = axios.create(apiConfig.host);
 const graphqlClient = axios.create(apiConfig.host);

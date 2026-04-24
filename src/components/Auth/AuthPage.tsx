@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@api/supabase";
+import { appConfig } from "@utilities/config/appConfig";
 // import { AppRouter } from '@components/routes/Router'
 import { GitHub, Google } from "@mui/icons-material";
 // import userJson from './user.json';
@@ -26,10 +27,7 @@ const Authenticated = () => {
   return null;
 };
 
-const redirectTo =
-  window.location.hostname.includes('localhost')
-    ? 'http://localhost:5173'
-    : 'https://memory.woodwardwebdev.com';
+const redirectTo = appConfig.frontendOrigin;
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -94,7 +92,7 @@ const LoginPage = () => {
         <Paper elevation={3} sx={{ borderRadius: 3, p: 4 }}>
           <Stack spacing={3}>
             <Typography variant="h4" fontWeight={600} textAlign="center">
-              Sign in to 👨‍💼 Memory.me 🌀
+              Sign in to 👨‍💼 {appConfig.appName} 🌀
             </Typography>
             {error && <Alert severity="error">{error}</Alert>}
             <Button
