@@ -24,6 +24,11 @@ import SettingsPage, { ProfileContent } from "@components/pages/SettingsPage";
 import IntegrationsPage, { IntegrationButtons, IntegrationsGrid } from "@components/pages/IntegrationsPage";
 import LoginPage from "@components/Auth/AuthPage";
 import { AuthGate } from "@components/Auth/AuthGate.gen";
+import AppShell from "@components/layout/AppShell";
+import InboxPage from "@components/pages/InboxPage";
+import DashboardPage from "@components/pages/DashboardPage";
+import KnowledgePage from "@components/pages/KnowledgePage";
+import AgentOpsPage from "@components/pages/AgentOpsPage";
 
 // const useProfileData = () => {
 //     const profileQuery = useQuery(queries.query("/api/v1/guardian/profile-context"))
@@ -283,7 +288,22 @@ const routes = [
     {
         label: "Dashboard",
         path: "/dashboard",
-        element: <IntegrationsPage />
+        element: <DashboardPage />
+    },
+    {
+        label: "Inbox",
+        path: "/inbox",
+        element: <InboxPage />
+    },
+    {
+        label: "Knowledge",
+        path: "/knowledge",
+        element: <KnowledgePage />
+    },
+    {
+        label: "Agent Ops",
+        path: "/agent-ops",
+        element: <AgentOpsPage />
     },
     {
         label: "Explorer",
@@ -340,17 +360,7 @@ const routes = [
 export default function Layout() {
     return (
         <Providers>
-            {() => (
-                    <main>
-                        <BasicNavbar />
-                        {/* <AuthGate>
-                            <>Logged In 🧙🏼‍♂️✨🎉</>
-                        </AuthGate> */}
-                        <Container maxWidth={false} sx={{ mt: 10 }}>
-                            <Outlet />
-                        </Container>
-                    </main>
-            )}
+            {() => <AppShell />}
         </Providers>
     );
 };
