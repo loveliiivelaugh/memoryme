@@ -68,58 +68,54 @@ const themeConfig = {
     // Dark theme
     dark: {
         border: {
-            default: "1px solid #333",
-            hover: "1px solid #777",
-            active: "1px solid #999",
-            main: "1px solid rgba(80, 170, 255, 0.8)",
+            default: "1px solid #30363d",
+            hover: "1px solid #58a6ff",
+            active: "1px solid #58a6ff",
+            main: "1px solid rgba(88, 166, 255, 0.5)",
         },
         palette: {
-            type: "dark",
+            mode: "dark",
             background: {
-                default: "#232323",
-                paper: "#1a1a1a",
+                default: "#0d1117",
+                paper: "#161b22",
             },
             primary: {
-                main: "#4A90E2",
+                main: "#58a6ff",
+                light: "#79b8ff",
+                dark: "#1f6feb",
             },
-            text: {
-                primary: "#f5f5f5",
-                secondary: "#aaa",
-            },
-            divider: "rgba(255,255,255,0.08)",
-            // divider: alpha(colors.grey[900], 0.8),
-            // primary: {
-            //     // Same as in light but we could
-            //     // adjust color hue if needed
-            //     // main: colors.indigo["500"],
-            //     main: "#333",
-            // },
             secondary: {
-                main: colors.grey["100"],
+                main: "#8b949e",
             },
-            tertiary: {
-                main: "rgba(80, 170, 255, 0.8)", // #50AAFF hex conversion
+            success: {
+                main: "#3fb950",
+                contrastText: "#0d1117",
             },
-            // background: {
-            //     default: colors.grey["800"],
-            //     // paper: colors.grey["800"],
-            //     paper: alpha(colors.grey[800], 1),
-            // },
-            // text: {
-            //     primary: colors.grey["100"],
-            //     secondary: colors.grey["500"],
-            //     disabled: colors.grey["300"],
-            // },
-            button: {
-                primary: colors.grey["100"],
-                secondary: colors.grey["500"],
-                disabled: colors.grey["300"],
+            warning: {
+                main: "#d29922",
+                contrastText: "#0d1117",
+            },
+            error: {
+                main: "#f85149",
+                contrastText: "#fff",
             },
             info: {
-                main: colors.blue["500"],
-                contrastText: colors.grey["100"],
-            }
-
+                main: "#58a6ff",
+                contrastText: "#0d1117",
+            },
+            text: {
+                primary: "#e6edf3",
+                secondary: "#8b949e",
+                disabled: "#484f58",
+            },
+            divider: "#30363d",
+            action: {
+                active: "#e6edf3",
+                hover: "rgba(177, 186, 196, 0.08)",
+                selected: "rgba(177, 186, 196, 0.12)",
+                disabled: "#484f58",
+                disabledBackground: "rgba(177, 186, 196, 0.06)",
+            },
         },
     },
 
