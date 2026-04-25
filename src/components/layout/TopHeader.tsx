@@ -6,6 +6,7 @@ import { useLocation, Link } from 'react-router';
 import { useSupabaseStore } from '@store/supabaseStore';
 
 const pageLabels: Record<string, string> = {
+    '/command-center': 'Command Center',
     '/inbox': 'Global Inbox',
     '/dashboard': 'Dashboard',
     '/knowledge': 'Knowledge Graph',
@@ -80,7 +81,7 @@ export default function TopHeader() {
             >
                 <SearchIcon sx={{ fontSize: '1rem', color: 'text.secondary', flexShrink: 0 }} />
                 <InputBase
-                    placeholder="Command (⌘ + K)"
+                    placeholder="Search memories, runs, agents, commands..."
                     fullWidth
                     sx={{
                         fontSize: '0.85rem',

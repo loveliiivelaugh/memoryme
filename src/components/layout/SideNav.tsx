@@ -1,4 +1,5 @@
 import { Box, Typography, IconButton, Tooltip } from '@mui/material';
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
@@ -11,6 +12,8 @@ import { ThemeToggleButton } from '@theme/ThemeProvider';
 const SIDEBAR_WIDTH = 240;
 
 const navItems = [
+    { label: 'Command Center', icon: <DashboardCustomizeIcon fontSize="small" />, path: '/command-center' },
+    { label: 'Dashboard', icon: <InboxIcon fontSize="small" />, path: '/dashboard' },
     { label: 'Inbox', icon: <InboxIcon fontSize="small" />, path: '/inbox' },
     { label: 'Knowledge Graph', icon: <AccountTreeIcon fontSize="small" />, path: '/knowledge' },
     { label: 'Agent Ops', icon: <MonitorHeartIcon fontSize="small" />, path: '/agent-ops' },
@@ -25,11 +28,11 @@ export default function SideNav() {
     const handleNewMemory = () => {
         utilityStore.setModal({
             open: true,
-            title: 'New Memory',
+            title: 'New Run',
             content: (
                 <Box sx={{ p: 2 }}>
                     <Typography variant="body2" color="text.secondary">
-                        New Memory creation form coming soon.
+                        Task/run creation from the command center is coming soon.
                     </Typography>
                 </Box>
             ),
@@ -63,7 +66,7 @@ export default function SideNav() {
                     gap: 1.5,
                     cursor: 'pointer',
                 }}
-                onClick={() => navigate('/dashboard')}
+                onClick={() => navigate('/command-center')}
             >
                 <Box
                     sx={{
@@ -97,8 +100,7 @@ export default function SideNav() {
             {/* Nav Items */}
             <Box sx={{ flex: 1, py: 1.5 }}>
                 {navItems.map((item) => {
-                    const isActive = location.pathname === item.path ||
-                        (item.path === '/inbox' && location.pathname === '/dashboard');
+                    const isActive = location.pathname === item.path;
                     return (
                         <Box
                             key={item.path}
@@ -167,7 +169,7 @@ export default function SideNav() {
                     }}
                 >
                     <AddIcon fontSize="small" />
-                    New Memory
+                    New Run
                 </Box>
             </Box>
         </Box>

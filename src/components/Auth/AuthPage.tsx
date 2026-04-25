@@ -9,7 +9,9 @@ import {
   Container,
   Stack,
   Alert,
-  Paper
+  Paper,
+  CircularProgress,
+  Divider,
 } from "@mui/material";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -19,12 +21,25 @@ import { appConfig } from "@utilities/config/appConfig";
 import { GitHub, Google } from "@mui/icons-material";
 // import userJson from './user.json';
 
-const isDev = (import.meta.env.MODE === 'development');
-
 const Authenticated = () => {
   const navigate = useNavigate();
-  navigate('/dashboard')
-  return null;
+
+  useEffect(() => {
+    navigate('/dashboard', { replace: true });
+  }, [navigate]);
+
+  return (
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'grid',
+        placeItems: 'center',
+        bgcolor: 'background.default',
+      }}
+    >
+      <CircularProgress size={24} />
+    </Box>
+  );
 };
 
 const redirectTo = appConfig.frontendOrigin;
@@ -33,11 +48,11 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [initializing, setInitializing] = useState(true);
 
   const handleLogin = async (provider: Provider) => {
     setLoading(true);
     setError(null);
-    console.log("Handle Login: ", provider)
     const { error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo } });
     if (error) setError(error.message);
     setLoading(false);
@@ -45,139 +60,171 @@ const LoginPage = () => {
 
   const { session, setSession }: any = useSupabaseStore();
 
-  console.log("👨🏻‍💻 User Session: ", session)
+  useEffect(() => {
+    let mounted = true;
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!mounted) return;
+      setSession(session);
+      setInitializing(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession);
+      if (nextSession) {
+        navigate('/dashboard', { replace: true });
+      }
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [navigate, setSession]);
 
   useEffect(() => {
-
-    let authSubscription: any;
-    if (!isDev) {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        console.log("👨🏻‍💻 User getSession: ", session)
-        setSession(session)
-      })
-  
-      const {
-        data: { subscription },
-      } = supabase.auth.onAuthStateChange((_event, session) => {
-        if (!subscription) return;
-        authSubscription = subscription;
-        console.log("👨🏻‍💻 User SessionChange: ", session)
-        setSession(session)
-      })
-    } else {
-      // setSession(userJson)
+    if (session) {
+      navigate('/dashboard', { replace: true });
     }
+  }, [navigate, session]);
 
-    if (session) navigate('/dashboard')
-
-    return () => authSubscription && authSubscription.unsubscribe()
-  }, []);
+  if (initializing) {
+    return (
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'grid',
+          placeItems: 'center',
+          bgcolor: 'background.default',
+        }}
+      >
+        <CircularProgress size={24} />
+      </Box>
+    );
+  }
 
   if (!session) return (
     <Box
       component={motion.div}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.35 }}
       sx={{
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         bgcolor: "background.default",
-        px: 2,
+        px: 2.5,
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `
+            radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 28%),
+            radial-gradient(circle at bottom, rgba(255,255,255,0.04), transparent 24%),
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: 'auto, auto, 56px 56px, 56px 56px',
+          opacity: 0.42,
+          pointerEvents: 'none',
+        }}
+      />
       <Container maxWidth="xs">
-        <Paper elevation={3} sx={{ borderRadius: 3, p: 4 }}>
-          <Stack spacing={3}>
-            <Typography variant="h4" fontWeight={600} textAlign="center">
-              Sign in to 👨‍💼 {appConfig.appName} 🌀
-            </Typography>
+        <Paper
+          elevation={0}
+          sx={{
+            borderRadius: 6,
+            p: { xs: 3, sm: 4 },
+            bgcolor: 'rgba(10, 10, 10, 0.78)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(18px)',
+            boxShadow: '0 24px 80px rgba(0,0,0,0.55)',
+            position: 'relative',
+          }}
+        >
+          <Stack spacing={3.5}>
+            <Stack spacing={2} alignItems="center">
+              <Box
+                sx={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(145deg, #ffffff 0%, #b7b7b7 100%)',
+                  display: 'grid',
+                  placeItems: 'center',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  boxShadow: '0 10px 30px rgba(255,255,255,0.12)',
+                }}
+              >
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundImage: 'repeating-linear-gradient(45deg, transparent 0 8px, rgba(0,0,0,0.9) 8px 12px)',
+                    clipPath: 'polygon(0 48%, 100% 100%, 0 100%)',
+                  }}
+                />
+              </Box>
+              <Stack spacing={1} alignItems="center">
+                <Typography variant="h4" fontWeight={600} textAlign="center" sx={{ letterSpacing: '-0.03em' }}>
+                  Log in to {appConfig.appName}
+                </Typography>
+                <Typography variant="body2" textAlign="center" color="text.secondary" sx={{ maxWidth: 320 }}>
+                  Your memory command center for operator chat, agent runs, canonical knowledge, and human approvals.
+                </Typography>
+              </Stack>
+            </Stack>
+
             {error && <Alert severity="error">{error}</Alert>}
+
             <Button
               fullWidth
-              variant="outlined"
-              // @ts-expect-error
-              color="text.secondary"
+              variant="contained"
               onClick={() => handleLogin('google')}
               disabled={loading}
+              startIcon={<Google />}
+              sx={{
+                minHeight: 56,
+                borderRadius: 999,
+                fontSize: '1rem',
+              }}
             >
-              Sign Up with Google <Google />
+              Continue with Google
             </Button>
             <Button
               fullWidth
               variant="outlined"
-              // @ts-expect-error
-              color="text.secondary"
               onClick={() => handleLogin('github')}
               disabled={loading}
+              startIcon={<GitHub />}
+              sx={{
+                minHeight: 56,
+                borderRadius: 999,
+                fontSize: '1rem',
+              }}
             >
-              Sign Up with Github <GitHub />
+              Continue with GitHub
             </Button>
-            {isDev && (
-              <Button
-                fullWidth
-                variant="outlined"
-                // @ts-expect-error
-                color="text.secondary"
-                onClick={() => handleLogin('github')}
-                disabled={loading}
-              >
-                Sign Up with Notion 📚
-              </Button>
-            )}
-            {/* <Typography variant="body2" textAlign="center" color="text.secondary">
-              Don't have an account? Contact your instructor.
-            </Typography>
-            <Grid container>
-              <Grid size={12}>
-                {[
-                  // @ts-ignore
-                  ...isDev ? [
-                    {
-                      label: "Admin",
-                      user: "guardian@woodwardwebdev.com",
-                      pass: import.meta.env.VITE_ADMIN_PASS
-                    },
-                    {
-                      label: "Guest",
-                      user: "mwoodward1@woodwardwebdev.com",
-                      pass: import.meta.env.VITE_GUEST_PASS
-                    },
-                  ] : [],
-                  {
-                    label: "Bypass",
-                    user: "bypass@schedme.io",
-                    pass: import.meta.env.VITE_GUEST_PASS
-                  }
-                ].map((defaultCreds, index) => (
-                  <Button
-                    key={index}
-                    color="inherit"
-                    onClick={async () => {
-                      console.log("using default creds: ", defaultCreds)
-                      if (defaultCreds.label === "Bypass") {
-                        setSession({ fake: true })
-                      } else {
-                        const result = await supabase.auth.signInWithPassword({ email: defaultCreds.user, password: defaultCreds.pass })
-                        console.log("result: ", result)
-                      }
-                    }}
-                    sx={{ textTransform: "none" }}
-                  >
-                    <ListItemText 
-                      primary={defaultCreds.label} 
-                      secondary={
-                        <Typography variant="subtitle1" color="error">
-                          For Development
-                        </Typography>
-                      }
-                    />
-                  </Button>
-                ))}
-              </Grid>
-            </Grid> */}
+
+            <Divider flexItem sx={{ borderColor: 'rgba(255,255,255,0.08)' }} />
+
+            <Stack spacing={1} alignItems="center">
+              <Typography variant="body2" textAlign="center" color="text.secondary">
+                Secure OAuth sign-in. You’ll land in your dashboard automatically after authentication.
+              </Typography>
+              <Typography variant="caption" textAlign="center" color="text.secondary" sx={{ opacity: 0.8 }}>
+                Need another provider? Add it in Supabase and this layout can extend without changing the auth flow.
+              </Typography>
+            </Stack>
           </Stack>
         </Paper>
       </Container>
