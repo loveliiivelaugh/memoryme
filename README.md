@@ -4,6 +4,7 @@ MemoryMe is evolving from a prototype playground into a personal dashboard for g
 
 ## Key docs
 - Product spec: `docs/MEMORYME_PRODUCT_SPEC.md`
+- Design spec: `docs/MEMORYME_DESIGN_SPEC.md`
 - Handoff status: `docs/HANDOFF_STATUS.md`
 
 ## Current local verification
