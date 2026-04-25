@@ -4,8 +4,9 @@
 This file gives a build agent or implementation agent immediate context on the current state of the repo and the intended next product direction.
 
 ## Product spec
-Primary spec:
+Primary specs:
 - `docs/MEMORYME_PRODUCT_SPEC.md`
+- `docs/MEMORYME_DESIGN_SPEC.md`
 
 ## Current implementation status
 Recent hardening work completed locally:
